@@ -62,6 +62,10 @@ class StreamActivity : Activity() {
         super.onCreate(savedInstanceState)
         prefs = Prefs(this)
         startUrl = intent.getStringExtra(EXTRA_URL) ?: run { finish(); return }
+        // Ask ws-scrcpy to size the stream to this screen when a stream link was pasted.
+        if (startUrl.contains("action=stream") && !startUrl.contains("fitToScreen=")) {
+            startUrl += "&fitToScreen=1"
+        }
 
         if (prefs.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -190,8 +194,12 @@ class StreamActivity : Activity() {
             if (isStreamPage()) webView.reload()
         }
         actions += getString(R.string.menu_reload) to { webView.reload() }
-        if (isStreamPage() && webView.canGoBack()) {
-            actions += "Device list" to { webView.goBack() }
+        if (isStreamPage()) {
+            actions += "Device list" to {
+                webView.evaluateJavascript(
+                    "location.href = location.origin + location.pathname + location.search;", null
+                )
+            }
         }
         if (prefs.showMenuButton) {
             actions += getString(R.string.menu_hide_button) to {
@@ -306,7 +314,29 @@ class StreamActivity : Activity() {
                   }
                   s.textContent = css;
                 };
-                window.addEventListener('hashchange', function() { setTimeout(window.__smApply, 0); });
+                // ws-scrcpy only reads the #!action=... part on page load (a desktop browser
+                // opens its links in a new tab). In a single WebView those links become a
+                // hash-only change, so reload whenever the hash changes to really open it.
+                var loadedHash = location.hash;
+                window.addEventListener('hashchange', function() {
+                  if (location.hash !== loadedHash) { location.reload(); }
+                  else { setTimeout(window.__smApply, 0); }
+                });
+                // Open target=_blank links (e.g. "H264 Converter") in this view, and ask
+                // ws-scrcpy to fit the stream to the screen.
+                document.addEventListener('click', function(e) {
+                  var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+                  if (!a) return;
+                  var url;
+                  try { url = new URL(a.href, location.href); } catch (err) { return; }
+                  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+                  var stream = url.hash.indexOf('action=stream') >= 0;
+                  if (!stream && a.target !== '_blank') return;
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (stream && url.hash.indexOf('fitToScreen=') < 0) url.hash += '&fitToScreen=1';
+                  location.href = url.toString();
+                }, true);
               }
               window.__smApply();
             })();
