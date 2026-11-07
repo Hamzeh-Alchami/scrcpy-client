@@ -306,7 +306,24 @@ class StreamActivity : Activity() {
                     css += 'html, body { margin:0 !important; padding:0 !important; background:#000 !important;' +
                            ' overflow:hidden !important; overscroll-behavior:none !important;' +
                            ' -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }' +
-                           '.device-view { margin:0 !important; }' +
+                           // Older ws-scrcpy (e.g. v0.8.x) sizes the video in device pixels and
+                           // floats it right, so it overflows the screen. Force a full-screen flex
+                           // layout and scale the video (object-fit: contain). ws-scrcpy's touch
+                           // mapping already accounts for a letterboxed touch layer, so touches
+                           // stay accurate.
+                           '.device-view { position:fixed !important; left:0 !important; top:0 !important;' +
+                           ' right:0 !important; bottom:0 !important; width:auto !important; height:auto !important;' +
+                           ' margin:0 !important; float:none !important; display:flex !important;' +
+                           ' flex-direction:row-reverse !important; }' +
+                           '.device-view > .video { float:none !important; position:relative !important;' +
+                           ' flex:1 1 auto !important; width:auto !important; height:100% !important;' +
+                           ' max-width:none !important; max-height:none !important; min-width:0 !important;' +
+                           ' min-height:0 !important; margin:0 !important; }' +
+                           '.device-view > .video > .video-layer, .device-view > .video > .touch-layer {' +
+                           ' position:absolute !important; left:0 !important; top:0 !important;' +
+                           ' width:100% !important; height:100% !important; object-fit:contain !important; }' +
+                           '.device-view > .control-buttons-list { float:none !important; flex-shrink:0 !important;' +
+                           ' overflow-y:auto !important; }' +
                            'canvas, video { touch-action:none; }';
                     if (window.__smHideToolbar) {
                       css += '.control-buttons-list, .more-box { display:none !important; }';
