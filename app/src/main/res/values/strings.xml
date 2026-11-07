@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Scrcpy Mirror</string>
+    <string name="title">Scrcpy Mirror</string>
+    <string name="subtitle">Mirror and control your Android through ws-scrcpy</string>
+    <string name="url_hint">http://my-server:8000</string>
+    <string name="url_label">ws-scrcpy URL</string>
+    <string name="connect">Connect</string>
+    <string name="recent">Recent</string>
+    <string name="opt_hide_toolbar">Hide the ws-scrcpy side toolbar</string>
+    <string name="opt_keep_screen_on">Keep this screen on while mirroring</string>
+    <string name="opt_reload_on_resize">Re-fit the stream when folding / unfolding</string>
+    <string name="opt_auto_connect">Open the last URL automatically on launch</string>
+    <string name="help">Tip: enter the server address (e.g. http://192.168.1.10:8000) to pick a device from the list, or paste the full stream link (the one ws-scrcpy opens when you tap a device) to jump straight to the mirrored screen.\n\nIn the mirror view: press Back or tap the ⋮ button for options.</string>
+    <string name="invalid_url">Please enter a valid http(s) URL</string>
+    <string name="menu_toolbar">Show / hide toolbar</string>
+    <string name="menu_reload">Reconnect</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_hide_button">Hide this button</string>
+    <string name="auth_title">Login required</string>
+    <string name="auth_user">Username</string>
+    <string name="auth_pass">Password</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="load_error">Can\'t reach %1$s\n%2$s</string>
+    <string name="retry">Retry</string>
+    <string name="remove">Remove</string>
+</resources>
