@@ -27,8 +27,8 @@ fills the whole display, and touch works.
 
 ## Get the APK
 
-Every push runs GitHub Actions (**Actions → Build APK**). Download the `scrcpy-mirror-apk` artifact, unzip it and
-install `app-release.apk` (or `app-debug.apk`) on your phone. You'll need to allow installing from unknown sources.
+On every push, GitHub Actions builds the app and publishes it to the **[Latest build](../../releases/tag/latest)** release.
+Open that page on your phone, tap `scrcpy-mirror.apk` and install it. Allow installs from unknown sources when asked. Use the normal Android installer; there is no need for APKMirror/SAI.
 
 ## Build locally
 
